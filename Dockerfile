@@ -20,6 +20,8 @@ COPY . .
 # Build the Go application
 RUN go build -o app
 
+EXPOSE 8080
+
 # Set the entrypoint
 ENTRYPOINT ["./app"]
 ENTRYPOINT ["top", "-b"]

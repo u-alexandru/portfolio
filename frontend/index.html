@@ -7,6 +7,32 @@
     <title>Chess</title>
 </head>
 <body>
-    <p>{{ .Name }}</p>
+<div class="flex h-full w-full">
+    <div class="flex justify-center flex-col items-center h-fit w-full bg-gray-100 p-3">
+        <div class="flex mt-2 justify-center w-full">
+            <form hx-post="/rooms/get" class="w-fit flex" hx-on::after-request="printRoomNumber(event)">
+                <div class="ml-2 mr-2">
+                    <input class="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="room_number" name="room_number" type="text" placeholder="Room Number">
+                </div>
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-3 rounded h-12 w-fit">
+                    Join Room
+                </button>
+            </form>
+            <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-3 ml-2 rounded h-12 w-fit">
+                Create Room
+            </button>
+        </div>
+        <div id="chess_board">
+
+        </div>
+    </div>
+</div>
+<script>
+    function printRoomNumber(event) {
+        if(event.detail.successful) {
+            console.log(event.detail.xhr.response)
+        }
+    }
+</script>
 </body>
 </html>

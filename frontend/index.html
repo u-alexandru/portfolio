@@ -13,10 +13,135 @@
     <title>Color2Alpha</title>
 </head>
 <body>
-<div class="flex h-full w-full">
-    Container
+<nav class="flex items-center justify-between flex-wrap bg-slate-100 p-6">
+    <a class="font-bold text-lg" href="/">Color2Alpha</a>
+</nav>
+<section class="mx-auto p-6 bg-slate-200 flex flex-col items-center">
+    <h1 class="text-xl font-bold leading-tight pt-10">Convert Any Color to Alpha</h1>
+    <div class="color-picker mt-4">
+        <form id='form' hx-encoding='multipart/form-data' hx-post='/upload'>
+            <input type='file' name='file' id='imgInput' accept='image/*'/>
+            <button>
+                Upload
+            </button>
+            <progress id='progress' value='0' max='100'></progress>
+        </form>
+    </div>
+</section>
+
+<div class="color-picker w-full flex flex-col items-center mt-4 sm:mt-8">
+    <img src="#" alt="Preview of uploaded image" id="imagePreview" class="max-w-[360px] max md:max-w-[480px]">
 </div>
+
 <script>
+    htmx.on('#form', 'htmx:xhr:progress', function(evt) {
+        htmx.find('#progress').setAttribute('value', evt.detail.loaded/evt.detail.total * 100)
+    });
+
+    const imageInput = document.getElementById('imgInput')
+    const imagePreviewElement = document.getElementById('imagePreview')
+
+    const offScreenCanvas = document.createElement('canvas');
+    const offScreenCanvasContext = offScreenCanvas.getContext('2d');
+
+    let imageObject = null
+    imageInput.addEventListener('change', (e) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(imageInput.files[0])
+        reader.onload = () => {
+            const image = new Image()
+            image.src = reader.result
+            image.onload = () => {
+                imagePreviewElement.src = image.src
+                setupCanvas(image)
+                imageObject = image
+            }
+        }
+    });
+
+
+    imagePreviewElement.addEventListener('mousemove', (e) => {
+            if(!imageObject) {
+                return
+            }
+            const target = e.target
+
+            const rect = target.getBoundingClientRect()
+            const x = e.clientX - rect.left
+            const y = e.clientY - rect.top
+
+            console.log(`${x}, ${y}`)
+
+            const colorPreviewSquare = getColorPreviewSquare();
+
+            colorPreviewSquare.style.top = `${e.clientY - 110}px`
+            colorPreviewSquare.style.left = `${e.clientX - 50}px`
+
+            const rgbaColor = convertPixelDataToRGBA(getPixelDataFromImageAtCoordinates(
+                imageObject,
+                x, y
+            ));
+
+            colorPreviewSquare.style.backgroundColor = rgbaColor
+    })
+
+    imagePreviewElement.addEventListener('mouseout', (e) => {
+       removeColorPreviewSquare()
+    });
+
+    function createColorPreviewSquare() {
+        const square = document.createElement('div')
+        square.setAttribute('id', 'colorPreviewSquare')
+        square.style.width = '100px'
+        square.style.height = '100px'
+        square.style.position = 'absolute'
+        square.style.border = '2px solid'
+        square.style.borderRadius = '2px'
+        square.style.borderColor = '#000'
+        document.body.appendChild(square)
+        return square
+    }
+
+    function getColorPreviewSquare() {
+        let findExistingSquare = document.querySelector('#colorPreviewSquare');
+        if (!findExistingSquare) {
+            findExistingSquare = createColorPreviewSquare();
+        }
+        return findExistingSquare
+    }
+
+    function removeColorPreviewSquare() {
+        const square = document.querySelector('#colorPreviewSquare');
+        if (square) {
+            square.remove()
+        }
+    }
+
+    function setupCanvas(img) {
+        offScreenCanvas.width = img.width;
+        offScreenCanvas.height = img.height;
+        offScreenCanvasContext.drawImage(img, 0, 0, img.width, img.height);
+    }
+
+    function getPixelDataFromImageAtCoordinates(img, x, y) {
+        const [previewWidth, previewHeight] = getPreviewImageSize();
+        const scaleX = img.width / previewWidth;
+        const scaleY = img.height / previewHeight;
+
+        const realX = Math.floor(x * scaleX);
+        const realY = Math.floor(y * scaleY);
+
+        return offScreenCanvasContext.getImageData(realX, realY, 1, 1).data;
+    }
+
+    function convertPixelDataToRGBA(pixelData) {
+        return `rgba(${pixelData[0]}, ${pixelData[1]}, ${pixelData[2]}, ${pixelData[3]})`;
+    }
+
+
+    function getPreviewImageSize() {
+        return [imagePreviewElement.width, imagePreviewElement.height];
+    }
 
 </script>
 </body>

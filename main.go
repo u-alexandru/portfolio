@@ -1,7 +1,6 @@
 package main
 
 import (
-	_ "github.com/mattn/go-sqlite3"
 	"html/template"
 	"net/http"
 )

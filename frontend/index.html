@@ -135,8 +135,10 @@
 
         let x, y;
         const rect = e.target.getBoundingClientRect();
+        let previewSquareOffsetTop = 110;
 
         if (e.type.startsWith('touch')) {
+            previewSquareOffsetTop = 0;
             const touch = e.touches[0];
             x = touch.clientX - rect.left;
             y = touch.clientY - rect.top;
@@ -150,7 +152,7 @@
         const offsetY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
         const offsetX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
 
-        colorPreviewSquare.style.top = `${offsetY - 110}px`;
+        colorPreviewSquare.style.top = `${offsetY - previewSquareOffsetTop}px`;
         colorPreviewSquare.style.left = `${offsetX - 50}px`;
 
         const pixelData = getPixelDataFromImageAtCoordinates(imageObject, x, y);

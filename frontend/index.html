@@ -106,14 +106,10 @@
         }
     });
 
-
-    imagePreviewElement.addEventListener('mousemove', (e) => {
-            handleHoverEvent(e)
-    })
-
-    imagePreviewElement.addEventListener('touchmove', (e) => {
-        handleHoverEvent(e)
-    })
+    imagePreviewElement.addEventListener('contextmenu', (e) => e.preventDefault());
+    imagePreviewElement.addEventListener('touchstart', (e) => e.preventDefault());
+    imagePreviewElement.addEventListener('mousemove', handleHoverEvent)
+    imagePreviewElement.addEventListener('touchmove', handleHoverEvent)
 
     function handleHoverEvent(e) {
         if(!imageObject) {
@@ -144,13 +140,9 @@
         colorPreviewSquare.style.backgroundColor = rgbaColor
     }
 
-    imagePreviewElement.addEventListener('mouseout', (e) => {
-       removeColorPreviewSquare()
-    });
+    imagePreviewElement.addEventListener('mouseout', removeColorPreviewSquare);
 
-    imagePreviewElement.addEventListener('touchend', (e) => {
-        removeColorPreviewSquare()
-    });
+    imagePreviewElement.addEventListener('touchend', removeColorPreviewSquare);
 
     function createColorPreviewSquare() {
         const square = document.createElement('div')

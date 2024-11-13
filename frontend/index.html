@@ -13,24 +13,61 @@
     <title>Color2Alpha</title>
 </head>
 <body>
-<nav class="flex items-center justify-between flex-wrap bg-slate-100 p-6">
-    <a class="font-bold text-lg" href="/">Color2Alpha</a>
+<nav class="flex items-center justify-between flex-wrap bg-slate-100 p-6 shadow-md">
+    <a class="font-bold text-lg text-slate-800" href="/">ColorPicker</a>
 </nav>
+
 <section class="mx-auto p-6 bg-slate-200 flex flex-col items-center">
-    <h1 class="text-xl font-bold leading-tight pt-10">Convert Any Color to Alpha</h1>
-    <div class="color-picker mt-4">
-        <form id='form' hx-encoding='multipart/form-data' hx-post='/upload'>
-            <input type='file' name='file' id='imgInput' accept='image/*'/>
-            <button>
-                Upload
-            </button>
-            <progress id='progress' value='0' max='100'></progress>
-        </form>
-    </div>
+    <h1 class="text-2xl font-bold leading-tight pt-10 text-slate-900">Pick Any Color from Your Image</h1>
+    <p class="text-slate-600 mt-2">Upload an image and hover over it to find the color of any pixel.</p>
+    <input type='file' name='file' id='imgInput' accept='image/*' class="border rounded-lg p-2 w-full max-w-xs bg-white shadow-sm hover:border-slate-400 mt-4"/>
 </section>
 
-<div class="color-picker w-full flex flex-col items-center mt-4 sm:mt-8">
-    <img src="#" alt="Preview of uploaded image" id="imagePreview" class="max-w-[360px] max md:max-w-[480px]">
+<div class="color-picker mt-6 flex flex-col md:flex-row md:space-x-8 w-full justify-center items-center space-y-4 md:space-y-0 pt-10">
+    <!-- Image Upload and Preview Container -->
+    <div class="image-container flex flex-col items-center">
+        <!-- Image preview -->
+        <div class="flex justify-center mt-4">
+            <img src="/static/images/placeholder.svg" alt="Preview of uploaded image" id="imagePreview" class="max-w-[360px] sm:max-w-[480px] shadow-lg rounded-md border border-slate-300 cursor-pointer">
+        </div>
+    </div>
+
+    <!-- Color Display Container -->
+    <div class="color-display-container flex flex-col items-center md:items-start">
+        <!-- Color preview square and instructions -->
+        <div class="color-preview mt-4 flex flex-col items-center md:items-start pt-4">
+            <p class="text-slate-700 text-center md:text-left" id="colorValueText">Hover over the image to see the color, click to save it.</p>
+        </div>
+
+        <!-- Color display formats -->
+        <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md mt-4 md:mt-8">
+            <h2 class="text-2xl font-bold mb-4 text-center md:text-left">Color Format Display</h2>
+
+            <div class="flex items-center justify-center md:justify-start space-x-4 mb-4">
+                <div class="w-16 h-16 rounded-md shadow-inner bg-[#3B82F6]" id="colorPreviewSquare"></div>
+                <input type="color" value="#3B82F6" class="w-16 h-10" disabled>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label for="hex" class="block text-sm font-medium text-gray-700">Hexadecimal:</label>
+                    <input id="hex" type="text" value="#3B82F6" readonly class="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+                <div>
+                    <label for="rgb" class="block text-sm font-medium text-gray-700">RGB:</label>
+                    <input id="rgb" type="text" value="rgb(59, 130, 246)" readonly class="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+                <div>
+                    <label for="rgba" class="block text-sm font-medium text-gray-700">RGBA:</label>
+                    <input id="rgba" type="text" value="rgba(59, 130, 246, 1)" readonly class="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+                <div>
+                    <label for="hsl" class="block text-sm font-medium text-gray-700">HSL:</label>
+                    <input id="hsl" type="text" value="hsl(217, 91%, 60%)" readonly class="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>

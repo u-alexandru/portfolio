@@ -58,7 +58,7 @@
     <div class="image-container flex flex-col items-center">
         <!-- Image preview -->
         <div class="flex justify-center mt-4">
-            <img src="/static/images/placeholder.svg" alt="Preview of uploaded image" id="imagePreview" class="max-w-[360px] sm:max-w-[480px] shadow-lg rounded-md border border-slate-300 cursor-pointer">
+            <img src="/static/images/placeholder.svg" alt="Preview of uploaded image" id="imagePreview" class="w-5/6 max-w-[360px] sm:max-w-[480px] shadow-lg rounded-md border border-slate-300 cursor-pointer">
         </div>
     </div>
 
@@ -123,10 +123,19 @@
         }
     });
 
-    imagePreviewElement.addEventListener('contextmenu', (e) => e.preventDefault());
-    imagePreviewElement.addEventListener('touchmove', (e) => e.preventDefault());
     imagePreviewElement.addEventListener('mousemove', handleHoverEvent)
-    imagePreviewElement.addEventListener('touchmove', handleHoverEvent)
+    imagePreviewElement.addEventListener('mouseup', updateColorInfoPanel)
+    imagePreviewElement.addEventListener('mouseout', removeColorPreviewSquare);
+
+    imagePreviewElement.addEventListener('contextmenu', (e) => e.preventDefault());
+    imagePreviewElement.addEventListener('touchmove', (e) => {
+        e.preventDefault()
+        handleHoverEvent(e)
+    });
+    imagePreviewElement.addEventListener('touchend', (e) => {
+        removeColorPreviewSquare()
+        updateColorInfoPanel()
+    });
 
     function handleHoverEvent(e) {
         if (!imageObject) {
@@ -157,12 +166,10 @@
         colorPreviewSquare.style.left = `${offsetX - 50}px`;
 
         const pixelData = getPixelDataFromImageAtCoordinates(imageObject, x, y);
-        currentSelectedPixelData = pixelData;
+        currentSelectedPixelData = pixelData
 
         colorPreviewSquare.style.backgroundColor = pixelDataToRGBA(pixelData);
     }
-
-    imagePreviewElement.addEventListener('mouseout', removeColorPreviewSquare);
 
     function createColorPreviewSquare() {
         const square = document.createElement('div')
@@ -218,15 +225,11 @@
         return [imagePreviewElement.width, imagePreviewElement.height];
     }
 
-    imagePreviewElement.addEventListener('click', (e) => {
+    function updateColorInfoPanel() {
         const rgbaColor = pixelDataToRGBA(currentSelectedPixelData);
         setPreviewColorElementsColor(rgbaColor)
         updateColorFormatPanel()
-    })
-
-    imagePreviewElement.addEventListener('touchend', (e) => {
-        removeColorPreviewSquare()
-    })
+    }
 
     function setPreviewColorElementsColor(rgbaColor) {
         const divSquare = document.querySelector('#colorPreviewSquareInfo');

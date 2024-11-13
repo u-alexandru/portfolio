@@ -109,69 +109,47 @@
     imagePreviewElement.addEventListener('contextmenu', (e) => e.preventDefault());
     imagePreviewElement.addEventListener('touchstart', (e) => e.preventDefault());
     imagePreviewElement.addEventListener('mousemove', handleHoverEvent)
-    imagePreviewElement.addEventListener('touchmove', handleTouchHoverEvent)
-
-    function handleTouchHoverEvent(e) {
-        if(!imageObject) {
-            return
-        }
-        const target = e.touches[0];
-
-        const rect = target.getBoundingClientRect()
-        const x = e.clientX - rect.left
-        const y = e.clientY - rect.top
-
-        console.log(`${x}, ${y}`)
-
-        const colorPreviewSquare = getColorPreviewSquare();
-
-        colorPreviewSquare.style.top = `${e.clientY - 110}px`
-        colorPreviewSquare.style.left = `${e.clientX - 50}px`
-
-        const pixelData = getPixelDataFromImageAtCoordinates(
-            imageObject,
-            x, y
-        )
-
-        currentSelectedPixelData = pixelData
-
-        const rgbaColor = pixelDataToRGBA(pixelData)
-
-        colorPreviewSquare.style.backgroundColor = rgbaColor
-    }
+    imagePreviewElement.addEventListener('touchmove', handleHoverEvent)
 
     function handleHoverEvent(e) {
-        if(!imageObject) {
-            return
+        if (!imageObject) {
+            return;
         }
-        const target = e.target
 
-        const rect = target.getBoundingClientRect()
-        const x = e.clientX - rect.left
-        const y = e.clientY - rect.top
+        let x, y;
+        const rect = e.target.getBoundingClientRect();
 
-        console.log(`${x}, ${y}`)
+        if (e.type.startsWith('touch')) {
+            const touch = e.touches[0];
+            x = touch.clientX - rect.left;
+            y = touch.clientY - rect.top;
+        } else {
+            x = e.clientX - rect.left;
+            y = e.clientY - rect.top;
+        }
 
         const colorPreviewSquare = getColorPreviewSquare();
 
-        colorPreviewSquare.style.top = `${e.clientY - 110}px`
-        colorPreviewSquare.style.left = `${e.clientX - 50}px`
+        const offsetY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
+        const offsetX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
 
-        const pixelData = getPixelDataFromImageAtCoordinates(
-            imageObject,
-            x, y
-        )
+        colorPreviewSquare.style.top = `${offsetY - 110}px`;
+        colorPreviewSquare.style.left = `${offsetX - 50}px`;
 
-        currentSelectedPixelData = pixelData
+        const pixelData = getPixelDataFromImageAtCoordinates(imageObject, x, y);
+        currentSelectedPixelData = pixelData;
 
-        const rgbaColor = pixelDataToRGBA(pixelData)
-
-        colorPreviewSquare.style.backgroundColor = rgbaColor
+        colorPreviewSquare.style.backgroundColor = pixelDataToRGBA(pixelData);
     }
 
     imagePreviewElement.addEventListener('mouseout', removeColorPreviewSquare);
 
-    imagePreviewElement.addEventListener('touchend', removeColorPreviewSquare);
+    imagePreviewElement.addEventListener('touchend', (e) => {
+        removeColorPreviewSquare()
+        const rgbaColor = pixelDataToRGBA(currentSelectedPixelData);
+        setPreviewColorElementsColor(rgbaColor)
+        updateColorFormatPanel()
+    });
 
     function createColorPreviewSquare() {
         const square = document.createElement('div')

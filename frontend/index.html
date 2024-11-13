@@ -58,7 +58,7 @@
     <div class="image-container flex flex-col items-center">
         <!-- Image preview -->
         <div class="flex justify-center mt-4">
-            <img src="/static/images/placeholder.svg" alt="Preview of uploaded image" id="imagePreview" class="w-4/5 max-w-[360px] sm:max-w-[480px] shadow-lg rounded-md border border-slate-300 cursor-pointer">
+            <img src="/static/images/placeholder.svg" alt="Preview of uploaded image" id="imagePreview" class="w-4/5 md:w-full max-w-[360px] sm:max-w-[480px] shadow-lg rounded-md border border-slate-300 cursor-pointer">
         </div>
     </div>
 
@@ -144,7 +144,7 @@
 
         let x, y;
         const rect = e.target.getBoundingClientRect();
-        let previewSquareOffsetTop = 110; // Adjust to set the desired distance above the touch point
+        let previewSquareOffsetTop = 110;
 
         if (e.type.startsWith('touch')) {
             const touch = e.touches[0];
@@ -158,7 +158,6 @@
 
         const colorPreviewSquare = getColorPreviewSquare();
 
-        // Set the offset based on event type, with adjustments for page scroll on touch
         const offsetY = e.type.startsWith('touch') ? e.touches[0].pageY : e.clientY;
         const offsetX = e.type.startsWith('touch') ? e.touches[0].pageX : e.clientX;
 
@@ -169,6 +168,10 @@
         currentSelectedPixelData = pixelData
 
         colorPreviewSquare.style.backgroundColor = pixelDataToRGBA(pixelData);
+
+        if(checkCoordinatesOutsideImageBounds(imageObject, x, y)) {
+            removeColorPreviewSquare()
+        }
     }
 
     function createColorPreviewSquare() {
@@ -205,8 +208,14 @@
         offScreenCanvasContext.drawImage(img, 0, 0, img.width, img.height);
     }
 
+    function checkCoordinatesOutsideImageBounds(img, x, y) {
+        const [previewWidth, previewHeight] = getPreviewImageSize();
+        return x < 0 || y < 0 || x >= previewWidth || y >= previewHeight
+    }
+
     function getPixelDataFromImageAtCoordinates(img, x, y) {
         const [previewWidth, previewHeight] = getPreviewImageSize();
+
         const scaleX = img.width / previewWidth;
         const scaleY = img.height / previewHeight;
 

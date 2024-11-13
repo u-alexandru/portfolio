@@ -107,8 +107,38 @@
     });
 
     imagePreviewElement.addEventListener('contextmenu', (e) => e.preventDefault());
+    imagePreviewElement.addEventListener('touchstart', (e) => e.preventDefault());
     imagePreviewElement.addEventListener('mousemove', handleHoverEvent)
-    imagePreviewElement.addEventListener('touchmove', handleHoverEvent)
+    imagePreviewElement.addEventListener('touchmove', handleTouchHoverEvent)
+
+    function handleTouchHoverEvent(e) {
+        if(!imageObject) {
+            return
+        }
+        const target = e.touches[0];
+
+        const rect = target.getBoundingClientRect()
+        const x = e.clientX - rect.left
+        const y = e.clientY - rect.top
+
+        console.log(`${x}, ${y}`)
+
+        const colorPreviewSquare = getColorPreviewSquare();
+
+        colorPreviewSquare.style.top = `${e.clientY - 110}px`
+        colorPreviewSquare.style.left = `${e.clientX - 50}px`
+
+        const pixelData = getPixelDataFromImageAtCoordinates(
+            imageObject,
+            x, y
+        )
+
+        currentSelectedPixelData = pixelData
+
+        const rgbaColor = pixelDataToRGBA(pixelData)
+
+        colorPreviewSquare.style.backgroundColor = rgbaColor
+    }
 
     function handleHoverEvent(e) {
         if(!imageObject) {

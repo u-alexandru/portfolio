@@ -1,3 +1,3 @@
-module color2alpha
+module colorpicker
 
 go 1.23.2

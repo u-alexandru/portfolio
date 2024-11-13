@@ -75,7 +75,7 @@
 
             <div class="flex items-center justify-center md:justify-start space-x-4 mb-4">
                 <div class="w-16 h-16 rounded-md shadow-inner bg-[#000]" id="colorPreviewSquareInfo"></div>
-                <input type="color" value="#000" class="w-16 h-10" disabled id="colorPreviewPickerInfo">
+                <input type="color" value="#000000" class="w-16 h-10" disabled id="colorPreviewPickerInfo">
             </div>
 
             <div class="space-y-4">
@@ -105,7 +105,7 @@
     const imagePreviewElement = document.getElementById('imagePreview')
 
     const offScreenCanvas = document.createElement('canvas');
-    const offScreenCanvasContext = offScreenCanvas.getContext('2d');
+    const offScreenCanvasContext = offScreenCanvas.getContext('2d', { willReadFrequently: true });
     let currentSelectedPixelData = null;
 
     let imageObject = null
@@ -124,7 +124,6 @@
     });
 
     imagePreviewElement.addEventListener('contextmenu', (e) => e.preventDefault());
-    imagePreviewElement.addEventListener('touchstart', (e) => e.preventDefault());
     imagePreviewElement.addEventListener('mousemove', handleHoverEvent)
     imagePreviewElement.addEventListener('touchmove', handleHoverEvent)
 
@@ -138,7 +137,7 @@
         let previewSquareOffsetTop = 110;
 
         if (e.type.startsWith('touch')) {
-            previewSquareOffsetTop = 0;
+            previewSquareOffsetTop = 120;
             const touch = e.touches[0];
             x = touch.clientX - rect.left;
             y = touch.clientY - rect.top;
@@ -165,9 +164,9 @@
 
     imagePreviewElement.addEventListener('touchend', (e) => {
         removeColorPreviewSquare()
-        const rgbaColor = pixelDataToRGBA(currentSelectedPixelData);
+        /*const rgbaColor = pixelDataToRGBA(currentSelectedPixelData);
         setPreviewColorElementsColor(rgbaColor)
-        updateColorFormatPanel()
+        updateColorFormatPanel()*/
     });
 
     function createColorPreviewSquare() {
@@ -228,6 +227,10 @@
         const rgbaColor = pixelDataToRGBA(currentSelectedPixelData);
         setPreviewColorElementsColor(rgbaColor)
         updateColorFormatPanel()
+    })
+
+    imagePreviewElement.addEventListener('touchend', (e) => {
+        removeColorPreviewSquare()
     })
 
     function setPreviewColorElementsColor(rgbaColor) {

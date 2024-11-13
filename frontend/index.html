@@ -124,6 +124,7 @@
     });
 
     imagePreviewElement.addEventListener('contextmenu', (e) => e.preventDefault());
+    imagePreviewElement.addEventListener('touchmove', (e) => e.preventDefault());
     imagePreviewElement.addEventListener('mousemove', handleHoverEvent)
     imagePreviewElement.addEventListener('touchmove', handleHoverEvent)
 
@@ -134,13 +135,13 @@
 
         let x, y;
         const rect = e.target.getBoundingClientRect();
-        let previewSquareOffsetTop = 110;
+        let previewSquareOffsetTop = 110; // Adjust to set the desired distance above the touch point
 
         if (e.type.startsWith('touch')) {
-            previewSquareOffsetTop = 120;
             const touch = e.touches[0];
-            x = touch.clientX - rect.left;
-            y = touch.clientY - rect.top;
+            previewSquareOffsetTop = 120;
+            x = touch.pageX - rect.left - window.scrollX;
+            y = touch.pageY - rect.top - window.scrollY;
         } else {
             x = e.clientX - rect.left;
             y = e.clientY - rect.top;
@@ -148,8 +149,9 @@
 
         const colorPreviewSquare = getColorPreviewSquare();
 
-        const offsetY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
-        const offsetX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+        // Set the offset based on event type, with adjustments for page scroll on touch
+        const offsetY = e.type.startsWith('touch') ? e.touches[0].pageY : e.clientY;
+        const offsetX = e.type.startsWith('touch') ? e.touches[0].pageX : e.clientX;
 
         colorPreviewSquare.style.top = `${offsetY - previewSquareOffsetTop}px`;
         colorPreviewSquare.style.left = `${offsetX - 50}px`;

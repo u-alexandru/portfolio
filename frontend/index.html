@@ -162,13 +162,6 @@
 
     imagePreviewElement.addEventListener('mouseout', removeColorPreviewSquare);
 
-    imagePreviewElement.addEventListener('touchend', (e) => {
-        removeColorPreviewSquare()
-        /*const rgbaColor = pixelDataToRGBA(currentSelectedPixelData);
-        setPreviewColorElementsColor(rgbaColor)
-        updateColorFormatPanel()*/
-    });
-
     function createColorPreviewSquare() {
         const square = document.createElement('div')
         square.setAttribute('id', 'colorPreviewSquare')

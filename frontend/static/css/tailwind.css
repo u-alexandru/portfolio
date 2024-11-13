@@ -643,6 +643,10 @@ video {
   width: 50%;
 }
 
+.w-4\/5 {
+  width: 80%;
+}
+
 .max-w-\[360px\] {
   max-width: 360px;
 }

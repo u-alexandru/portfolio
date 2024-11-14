@@ -62,6 +62,9 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func staticFileServer(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Cache-Control", "public, max-age=31536000")
+	w.Header().Set("Expires", "Tue, 01 Jan 2030 00:00:00 GMT")
+
 	http.ServeFile(w, r, "./frontend"+r.URL.Path)
 }
 

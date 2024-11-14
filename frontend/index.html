@@ -42,7 +42,7 @@
     <a class="font-bold text-lg text-slate-800" href="/">ColorPicker</a>
     <div class="flex items-center flex-shrink-0 text-white mr-6">
         <a href="https://github.com/u-alexandru/color-picker" target="_blank">
-            <img src="/static/images/github-mark.png" alt="Github Logo" class="w-8 h-8 rounded-full align-middle" />
+            <img src="/static/images/github-mark.svg" alt="Github Logo" class="w-8 h-8 rounded-full align-middle" />
         </a>
     </div>
 </nav>
@@ -53,7 +53,7 @@
     <input type='file' name='file' id='imgInput' accept='image/*' class="border rounded-lg p-2 w-full max-w-xs bg-white shadow-sm hover:border-slate-400 mt-4"/>
 </section>
 
-<div class="color-picker mt-6 flex flex-col md:flex-row md:space-x-8 w-full justify-center space-y-4 md:space-y-0 pt-10 pb-8 mb-4">
+<div class="color-picker mt-6 flex flex-col md:flex-row md:space-x-8 w-full justify-center space-y-4 md:space-y-0 pt-6 pb-8 mb-4">
     <!-- Image Upload and Preview Container -->
     <div class="image-container flex flex-col items-center">
         <div class="color-preview mt-4 flex flex-col items-center md:items-start pt-4">
@@ -61,7 +61,7 @@
         </div>
 
         <div class="flex justify-center mt-4">
-            <img src="/static/images/placeholder.svg" alt="Preview of uploaded image" id="imagePreview" class="w-4/5 md:w-full max-w-[360px] sm:max-w-[480px] shadow-lg rounded-md border border-slate-300 cursor-pointer">
+            <img src="/static/images/placeholder.svg" alt="Preview of uploaded image" id="imagePreview" class="w-4/5 md:w-full max-w-[360px] sm:max-w-[680px] shadow-lg rounded-md border border-slate-300 cursor-pointer">
         </div>
     </div>
 
@@ -131,11 +131,11 @@
     imagePreviewElement.addEventListener('touchmove', (e) => {
         e.preventDefault()
         handleHoverEvent(e)
-    });
+    }, {passive: true});
     imagePreviewElement.addEventListener('touchend', (e) => {
         removeColorPreviewSquare()
         updateColorInfoPanel()
-    });
+    }, {passive: true});
 
     function handleHoverEvent(e) {
         if (!imageObject) {

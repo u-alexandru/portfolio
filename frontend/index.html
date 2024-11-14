@@ -81,7 +81,6 @@
 
             <div class="flex items-center justify-center md:justify-start space-x-4 mb-4">
                 <div class="w-16 h-16 rounded-md shadow-inner bg-[#000]" id="colorPreviewSquareInfo"></div>
-                <input type="color" value="#000000" class="w-16 h-10" disabled id="colorPreviewPickerInfo">
             </div>
 
             <div class="space-y-4">
@@ -248,10 +247,7 @@
 
     function setPreviewColorElementsColor(rgbaColor) {
         const divSquare = document.querySelector('#colorPreviewSquareInfo');
-        const pickerSquare = document.querySelector('#colorPreviewPickerInfo');
-
         divSquare.style.backgroundColor = rgbaColor;
-        pickerSquare.value = pixelDataToHex(currentSelectedPixelData);
     }
 
     function pixelDataToHex(pixelData) {

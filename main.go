@@ -68,10 +68,16 @@ func staticFileServer(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "./frontend"+r.URL.Path)
 }
 
+func robotsTxtHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/plain")
+	http.ServeFile(w, r, "./frontend/static/robots.txt")
+}
+
 func main() {
 
 	http.HandleFunc("/", gzipHandler(handler))
 	http.HandleFunc("/static/", gzipHandler(staticFileServer))
+	http.HandleFunc("/robots.txt", robotsTxtHandler)
 
 	err := http.ListenAndServe(":8080", nil)
 

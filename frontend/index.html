@@ -49,14 +49,17 @@
 
 <section class="mx-auto p-6 bg-slate-200 flex flex-col items-center">
     <h1 class="text-2xl font-bold leading-tight pt-10 text-slate-900">Pick Any Color from Your Image</h1>
-    <p class="text-slate-600 mt-2">Upload an image and anywhere to find the color of any pixel.</p>
+    <p class="text-slate-600 mt-2">Upload an image and click anywhere on it to find the color of any pixel.</p>
     <input type='file' name='file' id='imgInput' accept='image/*' class="border rounded-lg p-2 w-full max-w-xs bg-white shadow-sm hover:border-slate-400 mt-4"/>
 </section>
 
-<div class="color-picker mt-6 flex flex-col md:flex-row md:space-x-8 w-full justify-center items-center space-y-4 md:space-y-0 pt-10">
+<div class="color-picker mt-6 flex flex-col md:flex-row md:space-x-8 w-full justify-center space-y-4 md:space-y-0 pt-10 pb-8 mb-4">
     <!-- Image Upload and Preview Container -->
     <div class="image-container flex flex-col items-center">
-        <!-- Image preview -->
+        <div class="color-preview mt-4 flex flex-col items-center md:items-start pt-4">
+            <p class="text-slate-700 text-center md:text-left" id="colorValueText">Click anywhere on the image to get the color.</p>
+        </div>
+
         <div class="flex justify-center mt-4">
             <img src="/static/images/placeholder.svg" alt="Preview of uploaded image" id="imagePreview" class="w-4/5 md:w-full max-w-[360px] sm:max-w-[480px] shadow-lg rounded-md border border-slate-300 cursor-pointer">
         </div>
@@ -65,12 +68,9 @@
     <!-- Color Display Container -->
     <div class="color-display-container flex flex-col items-center md:items-start">
         <!-- Color preview square and instructions -->
-        <div class="color-preview mt-4 flex flex-col items-center md:items-start pt-4">
-            <p class="text-slate-700 text-center md:text-left" id="colorValueText">Hover over the image to see the color, click to save it.</p>
-        </div>
 
         <!-- Color display formats -->
-        <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md mt-4 md:mt-8">
+        <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md mt-4 md:mt-16">
             <h2 class="text-2xl font-bold mb-4 text-center md:text-left">Color Format Display</h2>
 
             <div class="flex items-center justify-center md:justify-start space-x-4 mb-4">
